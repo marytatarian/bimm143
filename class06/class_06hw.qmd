@@ -1,0 +1,81 @@
+---
+title: "class06_hw"
+author: "Mary Tatarian"
+format: pdf
+editor: visual
+---
+
+```{r}
+# Can you improve this analysis code?
+library(bio3d)
+s1 <- read.pdb("4AKE")  # kinase with drug
+s2 <- read.pdb("1AKE")  # kinase no drug
+s3 <- read.pdb("1E4Y")  # kinase with drug
+
+s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+s2.chainA <- trim.pdb(s2, chain="A", elety="CA")
+s3.chainA <- trim.pdb(s3, chain="A", elety="CA")
+
+s1.b <- s1.chainA$atom$b
+s2.b <- s2.chainA$atom$b
+s3.b <- s3.chainA$atom$b
+
+plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor")
+plotb3(s2.b, sse=s2.chainA, typ="l", ylab="Bfactor")
+plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
+```
+
+the first step is to use `read.pdb` to read the protein.
+
+```{r}
+protein <- read.pdb("4AKE")
+```
+
+Next step is using `trim.pdb` and using chain and elety, specifically for chain A and elety CA
+
+```{r}
+protein.chainA <- trim.pdb(protein, chain="A", elety="CA")
+```
+
+The next step is calling a specific atom from chainA
+
+```{r}
+protein.b <- protein.chainA$atom$b
+```
+
+The final step is to plot with optional secondary structures in the marginal regions. we will be plotting a line graph (typ="l")
+
+```{r}
+plotb3(protein.b, sse=protein.chainA, type="l",ylab="Bfactor")
+```
+
+Now we will input all of this information in the format of a function.
+
+```{r}
+#what the function does and how to use it AND what is the output of the function
+
+##this function reads proteins from a database and then plots the output as the Bfactor using chainA
+
+plot_protein <- function(x) {
+  #use read.pdb to read the protein
+  protein <- read.pdb(x)
+  
+  #using trim.pdb and using chain and elety, specifically for chain A and elety CA
+  protein.chainA <- trim.pdb(protein, chain="A", elety="CA")
+  
+  #calling a specific atom from chainA
+  protein.b <- protein.chainA$atom$b
+  
+  #plot with optional secondary structures in the marginal regions, using a line graph
+  plotb3(protein.b, sse=protein.chainA, type="l",ylab="Bfactor")
+}
+```
+
+In the function, we wrote all the necessary statements required to generalize the function for any protein. now we will plot the protein using the function above
+
+```{r}
+# functions match and desired outputs are produced
+plot_protein("4AKE")
+plot_protein("1AKE")
+plot_protein("1E4Y")
+```
